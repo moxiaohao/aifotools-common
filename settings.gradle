@@ -1,0 +1,1 @@
+include ':app', ':aifotools-plugin', ':aifotools-apt', ':aifotools-api', ':aifotools-lib'

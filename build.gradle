@@ -1,0 +1,91 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    apply from: 'versions.gradle'
+    repositories {
+
+        google()
+        jcenter()
+        maven {
+            url("http://maven.aliyun.com/nexus/content/groups/public/")
+        }
+        maven {
+            credentials {
+                username 'nanpRL'
+                password 'jEE1TA5jIC'
+            }
+            url 'https://repo.rdc.aliyun.com/repository/49107-release-3gYVam/'
+        }
+        maven {
+            credentials {
+                username 'nanpRL'
+                password 'jEE1TA5jIC'
+            }
+            url 'https://repo.rdc.aliyun.com/repository/49107-snapshot-egC0LB/'
+        }
+        maven{
+            url uri('repo')
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+//        classpath 'com.foryou.library:aifotools_plugin:0.1.14'
+        classpath 'io.aifo.plugin:aifotools-plugin:1.0.0'
+    }
+}
+allprojects {
+    repositories {
+        maven {
+            url("http://maven.aliyun.com/nexus/content/groups/public/")
+        }
+        maven { url "https://jitpack.io" }
+        google()
+        jcenter()
+
+        maven {
+            credentials {
+                username 'nanpRL'
+                password 'jEE1TA5jIC'
+            }
+            url 'https://repo.rdc.aliyun.com/repository/49107-release-3gYVam/'
+        }
+        maven {
+            credentials {
+                username 'nanpRL'
+                password 'jEE1TA5jIC'
+            }
+            url 'https://repo.rdc.aliyun.com/repository/49107-snapshot-egC0LB/'
+        }
+    }
+    parseLocalProperties()
+}
+
+
+def parseLocalProperties() {
+
+    File file = rootProject.file('maven.properties')
+    if (file.exists()) {
+        InputStream inputStream = rootProject.file('maven.properties').newDataInputStream();
+        Properties properties = new Properties()
+        properties.load(inputStream)
+
+        if (properties.containsKey("MAVEN_REPO_SNAPSHOT_URL")) {
+            ext.MAVEN_REPO_SNAPSHOT_URL = properties.getProperty("MAVEN_REPO_SNAPSHOT_URL")
+            ext.MAVEN_REPO_RELEASE_URL = properties.getProperty("MAVEN_REPO_RELEASE_URL")
+            ext.GROUP_ID = properties.getProperty("GROUP_ID")
+            ext.TYPE = properties.getProperty("TYPE")
+            ext.USERNAME = properties.getProperty("USERNAME")
+            ext.PASSWORD = properties.getProperty("PASSWORD")
+        }
+    }
+}
+
+//不加这一句MakeProject会报错，其余都正常无影响
+task compileJava {}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+ext {
+
+}
+//注意⚠️:   插件修改后运行前需要运行 ./gradlew -p plugin clean build uploadArchives --info

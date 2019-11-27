@@ -1,0 +1,67 @@
+//import io.aifo.plugin.application.JavassistPlugin
+//import io.aifo.plugin.application.AspectjPlugin
+
+apply plugin: 'com.android.application'
+apply plugin: 'io.aifo.plugin.app.aspectj'
+//apply plugin: 'io.aifo.plugin.app.javassist'
+
+
+android {
+
+    compileSdkVersion build_versions.compile_sdk
+    defaultConfig {
+        applicationId "io.aifo.example"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 1
+        versionName "1.0"
+        renderscriptTargetApi 20
+        renderscriptSupportModeEnabled true
+        vectorDrawables.useSupportLibrary = true
+
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        debug {
+            //64K
+            minifyEnabled false
+            zipAlignEnabled true
+            debuggable true
+        }
+
+        release {
+            //64K
+            minifyEnabled false
+            zipAlignEnabled true
+            debuggable false
+        }
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+    dexOptions {
+        preDexLibraries = false
+    }
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation deps.foryou.core_ui
+
+    annotationProcessor project(':aifotools-apt')
+//    implementation 'com.foryou.library:aifotools_lib:0.1.6'
+    implementation project(':aifotools-lib')
+//    implementation project(':aifotools-api')
+}
